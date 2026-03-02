@@ -32,11 +32,11 @@ exports.createTeam = async (req, res) => {
       });
     }
 
-    if (members.length > event.maxTeamSize) {
-      return res.status(400).json({
-        message: "Team size exceeded",
-      });
-    }
+    // if (members.length > event.maxTeamSize) {
+    //   return res.status(400).json({
+    //     message: "Team size exceeded",
+    //   });
+    // }
 
     //Check if all emails exist in DB
     const users = await User.find({
@@ -51,14 +51,19 @@ exports.createTeam = async (req, res) => {
 
     const memberIds = users.map((user) => user._id);
 
-    //Ensure leader is included
+    //Ensure leader is included .. If leader didn’t include their own email, system auto-adds them.
     if (!memberIds.some((id) => id.toString() === req.user.id)) {
       memberIds.push(req.user.id);
     }
 
     // Prevent duplicate members
     const uniqueMemberIds = [...new Set(memberIds.map((id) => id.toString()))];
-
+    
+    if (uniqueMemberIds.length < event.minTeamSize) {
+  return res.status(400).json({
+    message: `Minimum ${event.minTeamSize} members required`,
+  });
+}
     if (uniqueMemberIds.length > event.maxTeamSize) {
       return res.status(400).json({
         message: "Team size exceeded",
