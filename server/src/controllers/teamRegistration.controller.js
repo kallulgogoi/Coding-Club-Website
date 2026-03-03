@@ -1,7 +1,7 @@
 const Team = require("../models/teamRegister.model");
 const Event = require("../models/event.model");
 const User = require("../models/user.model");
-
+const { sendNotification } = require("../controllers/notification.controller");
 exports.createTeam = async (req, res) => {
   try {
     const { teamName, members } = req.body; // members = array of emails
@@ -58,12 +58,12 @@ exports.createTeam = async (req, res) => {
 
     // Prevent duplicate members
     const uniqueMemberIds = [...new Set(memberIds.map((id) => id.toString()))];
-    
+
     if (uniqueMemberIds.length < event.minTeamSize) {
-  return res.status(400).json({
-    message: `Minimum ${event.minTeamSize} members required`,
-  });
-}
+      return res.status(400).json({
+        message: `Minimum ${event.minTeamSize} members required`,
+      });
+    }
     if (uniqueMemberIds.length > event.maxTeamSize) {
       return res.status(400).json({
         message: "Team size exceeded",
@@ -89,7 +89,15 @@ exports.createTeam = async (req, res) => {
       members: uniqueMemberIds,
       teamLeader: req.user.id,
     });
-
+    await Promise.all(
+      uniqueMemberIds.map((memberId) =>
+        sendNotification(
+          memberId,
+          "Team Registration Successful",
+          `You have been added to team ${teamName.trim()} for ${event.title}`,
+        ),
+      ),
+    );
     res.status(201).json(team);
   } catch (error) {
     res.status(400).json({ message: "Invalid event ID" });

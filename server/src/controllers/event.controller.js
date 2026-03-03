@@ -1,4 +1,7 @@
 const Event = require("../models/event.model");
+const {
+  sendNotificationToAll,
+} = require("../controllers/notification.controller");
 
 // create event
 exports.createEvent = async (req, res) => {
@@ -11,6 +14,7 @@ exports.createEvent = async (req, res) => {
       mode,
       maxTeamSize,
       whatsappGroupLink,
+      registrationStatus,
     } = req.body;
 
     if (!title || !description || !startDateIST || !endDateIST || !mode) {
@@ -31,7 +35,8 @@ exports.createEvent = async (req, res) => {
         .json({ message: "Description must be 10-500 characters" });
     }
 
-    if (!req.file) {
+    // Safety check for the poster file
+    if (!req.file || !req.file.path) {
       return res.status(400).json({ message: "Event poster is required" });
     }
 
@@ -54,10 +59,19 @@ exports.createEvent = async (req, res) => {
         .json({ message: "Mode must be either 'solo' or 'team'" });
     }
 
+    if (
+      registrationStatus &&
+      !["open", "closed"].includes(registrationStatus)
+    ) {
+      return res.status(400).json({
+        message: "registrationStatus must be either 'open' or 'closed'",
+      });
+    }
+
     let finalTeamSize = 1;
 
     if (mode === "team") {
-      if (!maxTeamSize || maxTeamSize < 2) {
+      if (!maxTeamSize || Number(maxTeamSize) < 2) {
         return res
           .status(400)
           .json({ message: "Team events must have maxTeamSize >= 2" });
@@ -73,12 +87,17 @@ exports.createEvent = async (req, res) => {
       mode,
       maxTeamSize: finalTeamSize,
       whatsappGroupLink: whatsappGroupLink || "",
+      registrationStatus: registrationStatus || "open", // Default to open if not provided
       posterUrl: req.file.path,
       createdBy: req.user.id,
     });
 
+    // Notify all users
+    await sendNotificationToAll("New Event Posted!", title.trim());
+
     res.status(201).json({ message: "Event created successfully", event });
   } catch (error) {
+    console.error("CREATE EVENT ERROR:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
@@ -177,7 +196,7 @@ exports.updateEvent = async (req, res) => {
     }
 
     if (mode === "team" || event.mode === "team") {
-      if (maxTeamSize && maxTeamSize >= 2) {
+      if (maxTeamSize && Number(maxTeamSize) >= 2) {
         event.maxTeamSize = Number(maxTeamSize);
       }
     }
@@ -193,7 +212,8 @@ exports.updateEvent = async (req, res) => {
       event.registrationStatus = registrationStatus;
     }
 
-    if (req.file) {
+    // Safely update poster file if a new one was uploaded
+    if (req.file && req.file.path) {
       event.posterUrl = req.file.path;
     }
 
@@ -201,6 +221,7 @@ exports.updateEvent = async (req, res) => {
 
     res.json({ message: "Event updated successfully", event });
   } catch (error) {
+    console.error("UPDATE EVENT ERROR:", error);
     res.status(400).json({ message: "Invalid event ID" });
   }
 };
@@ -238,7 +259,9 @@ exports.updateRegistrationStatus = async (req, res) => {
     event.registrationStatus = registrationStatus;
     await event.save();
 
-    res.json({ message: `Registration ${registrationStatus}` });
+    res.json({
+      message: `Registration status changed to ${registrationStatus}`,
+    });
   } catch (error) {
     res.status(400).json({ message: "Invalid event ID" });
   }

@@ -1,4 +1,5 @@
 const Announcement = require("../models/announcement.model");
+const { sendNotificationToAll } = require("./notification.controller");
 
 // get all announcements
 exports.getAnnouncements = async (req, res) => {
@@ -41,6 +42,11 @@ exports.createAnnouncement = async (req, res) => {
       message: message.trim(),
       createdBy: req.user.id,
     });
+
+    await sendNotificationToAll(
+      `New Announcement: ${title.trim()}`,
+      message.trim(),
+    );
 
     res.status(201).json({
       message: "Announcement created successfully",

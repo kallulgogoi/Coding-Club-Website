@@ -1,6 +1,7 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
-const dotenv = require("dotenv");
 const multer = require("multer");
 const connectDb = require("./config/db");
 
@@ -10,8 +11,9 @@ const eventRoutes = require("./routes/event.routes");
 const announcementRoutes = require("./routes/announcement.routes");
 const soloRegistrationRoutes = require("./routes/soloRegistration.routes");
 const teamRegistrationRoutes = require("./routes/teamRegistration.routes");
+const notificationRoutes = require("./routes/notification.routes");
 
-dotenv.config();
+// Connect to database
 connectDb();
 
 const app = express();
@@ -35,6 +37,7 @@ app.use("/api/events", eventRoutes);
 app.use("/api/announcements", announcementRoutes);
 app.use("/api/registrations/solo", soloRegistrationRoutes);
 app.use("/api/registrations/team", teamRegistrationRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
