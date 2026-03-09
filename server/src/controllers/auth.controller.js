@@ -1,8 +1,8 @@
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+const generateToken = (id, role) => {
+  return jwt.sign({ id, role }, process.env.JWT_SECRET, {
     expiresIn: "7d",
   });
 };
@@ -34,7 +34,7 @@ exports.googleAuth = async (req, res) => {
     }
 
     // Generate token
-    const token = generateToken(user._id);
+    const token = generateToken(user._id, user.role);
 
     res.status(200).json({
       token,
@@ -66,6 +66,10 @@ exports.getMe = async (req, res) => {
       role: user.role,
       profileCompleted: user.profileCompleted,
       profilePicture: user.profilePicture,
+      scholarId: user.scholarId,
+      branch: user.branch,
+      year: user.year,
+      phone: user.phone,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
