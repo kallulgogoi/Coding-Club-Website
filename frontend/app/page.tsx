@@ -136,7 +136,9 @@ const InfiniteScrollRow = ({
 };
 
 const ParticleBackground = () => {
-  const [particles, setParticles] = useState<{ id: number; x: number; y: number; duration: number; delay: number; }[]>([]);
+  const [particles, setParticles] = useState<
+    { id: number; x: number; y: number; duration: number; delay: number }[]
+  >([]);
 
   useEffect(() => {
     const newParticles = [...Array(30)].map((_, i) => ({
@@ -243,15 +245,15 @@ export default function LandingPage() {
             variants={titleContainer}
             initial="hidden"
             animate="visible"
-            className="text-center" 
+            className="text-center"
           >
             <motion.img
-              variants={letterAnim} 
+              variants={letterAnim}
               src="/images/logo.png"
               alt="TOWNHALL 2026 Logo"
-              className="mx-auto h-auto w-auto max-w-[99%] md:max-w-[79%] lg:max-w-[59%] drop-shadow-[0_0_25px_rgba(250,204,21,0.4)]"
-              animate={{ opacity: [0.8, 1, 0.8] }} 
-              transition={{ repeat: Infinity, duration: 2 }} 
+              className="mx-auto h-auto sm:-mb-2 sm:-mt-15 w-auto max-w-[99%] md:max-w-[79%] lg:max-w-[59%] drop-shadow-[0_0_25px_rgba(250,204,21,0.4)]"
+              animate={{ opacity: [0.8, 1, 0.8] }}
+              transition={{ repeat: Infinity, duration: 2 }}
             />
           </motion.div>
 
@@ -259,7 +261,7 @@ export default function LandingPage() {
             initial={{ y: 200, opacity: 0 }}
             animate={{ y: -150, opacity: 1 }}
             transition={{ duration: 1.4, delay: 0.2 }}
-            className="relative flex justify-center z-20 mt-3 sm:-mt-24 lg:-mt-32"
+            className="relative flex justify-center z-20 mt-3 sm:-mt-30 lg:-mt-40"
           >
             <Image
               src="/images/ash.png"
@@ -273,35 +275,41 @@ export default function LandingPage() {
           </motion.div>
         </div>
       </section>
-
       <motion.section
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
         variants={sectionVar}
-        className="relative py-24 px-6 bg-[#050505] border-y border-white/5"
+        className="relative py-24 px-6 -mt-30 sm:-mt-30 bg-[#050505] overflow-hidden"
       >
-        <div className="max-w-7xl mx-auto grid md:grid-cols-5 gap-12 items-center">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/about_bg.png"
+            alt="Section Background"
+            fill
+            className="object-cover opacity-20 grayscale"
+            priority={false}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-transparent to-[#050505]" />
+          <div className="absolute inset-0 bg-black/40" />
+        </div>
+
+        <div className="max-w-7xl mx-auto grid md:grid-cols-5 gap-12 items-center relative z-10">
           <div className="md:col-span-3 space-y-6">
-            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-yellow-400/20 bg-yellow-400/5 text-yellow-400">
-              <Info className="w-4 h-4" />
-              <span className="text-xs uppercase font-bold tracking-wider">
-                Annual Flagship Event
-              </span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-black text-white uppercase font-['Orbitron'] tracking-tighter">
+            <h2 className="text-4xl md:text-6xl font-black text-white uppercase font-['Orbitron'] tracking-tighter">
               About <span className="text-yellow-400">TownHall</span>
             </h2>
             <div className="w-20 h-1 bg-yellow-400" />
-            <p className="text-white/70 text-lg leading-relaxed max-w-2xl font-['Rajdhani'] font-medium">
-              TownHall is the premier annual technical symposium of **Coding
-              Club NIT Silchar**. It serves as a battleground for innovation,
-              bringing together the sharpest minds for high-stakes challenges,
-              collaborative learning, and technological excellence.
+            <p className="text-white/70 text-2xl leading-relaxed max-w-2xl font-['Rajdhani'] font-medium">
+              TownHall is the premier annual technical symposium of{" "}
+              <span className="text-yellow-400">Coding Club NIT Silchar</span>.
+              It serves as a battleground for innovation, bringing together the
+              sharpest minds for high-stakes challenges, collaborative learning,
+              and technological excellence.
             </p>
           </div>
           <div className="md:col-span-2 flex justify-center">
-            <div className="p-8 border border-white/5 rounded-3xl bg-[#080808] shadow-2xl">
+            <div className="p-8  bg-[#080808] shadow-2xl">
               <Image
                 src="/images/about_image.png"
                 alt="About TownHall"
@@ -397,7 +405,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <footer className="bg-[#030303] border-t border-white/10 pt-20 pb-10 px-6 relative overflow-hidden">
+      <footer className="bg-[#030303]  pt-20 pb-10 px-6 relative overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/footer_bg.png"
