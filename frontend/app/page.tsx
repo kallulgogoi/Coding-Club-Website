@@ -179,7 +179,7 @@ export default function LandingPage() {
   return (
     <main className="min-h-screen bg-black overflow-x-hidden font-['Rajdhani']">
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-6 py-20">
-        <div className="absolute inset-0 z-0  w-[400px] h-[600px] md:w-full md:h-[1000px]">
+        <div className="absolute inset-0 z-0  w-full h-[670px] md:w-full md:h-[1000px]">
           <Image
             src="/images/hero.gif"
             alt="Hero Background"

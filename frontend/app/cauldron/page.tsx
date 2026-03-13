@@ -51,9 +51,17 @@ export default function CauldronPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-6xl sm:text-8xl md:text-9xl font-black text-white uppercase tracking-tighter font-['Orbitron']"
+            className="text-6xl sm:text-8xl md:text-9xl font-black text-white uppercase tracking-tighter font-['Orbitron'] flex items-center justify-center"
           >
-            <span className="text-yellow-400 drop-shadow-[0_0_20px_rgba(250,204,21,0.5)]">CAULDRON</span>
+            <span className="text-yellow-400 ">CAULDR</span>
+            <Image 
+              src="/images/beyblade1.png" 
+              alt="O" 
+              width={120} 
+              height={120} 
+              className="w-[0.8em] h-[0.8em] object-contain mx-1 "
+            />
+            <span className="text-yellow-400 ">N</span>
           </motion.h1>
 
           <motion.p
