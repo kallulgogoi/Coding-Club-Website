@@ -1,5 +1,5 @@
 "use client";
-import { motion, useAnimationControls } from "framer-motion";
+import { motion, useAnimationControls, Variants } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -26,7 +26,7 @@ import {
   Clock,
 } from "lucide-react";
 
-const titleContainer = {
+const titleContainer: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -34,7 +34,7 @@ const titleContainer = {
   },
 };
 
-const letterAnim = {
+const letterAnim: Variants = {
   hidden: { y: 40, opacity: 0, scale: 0.8 },
   visible: {
     y: 0,
@@ -44,7 +44,7 @@ const letterAnim = {
   },
 };
 
-const sectionVar = {
+const sectionVar: Variants = {
   hidden: { opacity: 0, y: 50 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, delay: 0.2 } },
 };
@@ -71,7 +71,15 @@ const galleryImages = [
   "https://images.unsplash.com/photo-1526666923127-b2970f64b422?q=80&w=600&auto=format&fit=crop",
 ];
 
-const InfiniteScrollRow = ({ images, direction = "left", onImageClick }) => {
+const InfiniteScrollRow = ({
+  images,
+  direction = "left",
+  onImageClick,
+}: {
+  images: string[];
+  direction?: "left" | "right";
+  onImageClick: (src: string) => void;
+}) => {
   const controls = useAnimationControls();
 
   useEffect(() => {
@@ -128,7 +136,7 @@ const InfiniteScrollRow = ({ images, direction = "left", onImageClick }) => {
 };
 
 const ParticleBackground = () => {
-  const [particles, setParticles] = useState([]);
+  const [particles, setParticles] = useState<{ id: number; x: number; y: number; duration: number; delay: number; }[]>([]);
 
   useEffect(() => {
     const newParticles = [...Array(30)].map((_, i) => ({
@@ -166,14 +174,14 @@ const ParticleBackground = () => {
 
 export default function LandingPage() {
   const { isAuthenticated } = useAuth();
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   return (
     <main className="min-h-screen bg-black overflow-x-hidden font-['Rajdhani']">
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-6 py-20">
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0 w-full h-[1000px]">
           <Image
-            src="/images/hero_bg.png"
+            src="/images/hero.gif"
             alt="Hero Background"
             fill
             priority
@@ -188,8 +196,8 @@ export default function LandingPage() {
           <div className="absolute inset-0 opacity-[0.05] bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
         </div>
 
-        <div className="relative w-full max-w-7xl flex flex-col items-center justify-center z-10">
-          <motion.div
+        <div className="relative w-full max-w-7xl flex flex-col items-center justify-center z-10 -mt-50">
+          {/* <motion.div
             variants={titleContainer}
             initial="hidden"
             animate="visible"
@@ -229,11 +237,27 @@ export default function LandingPage() {
               transition={{ delay: 1, duration: 1 }}
               className="h-[1px] bg-yellow-400/50 mx-auto mt-4"
             />
+          </motion.div> */}
+
+          <motion.div
+            variants={titleContainer}
+            initial="hidden"
+            animate="visible"
+            className="text-center" 
+          >
+            <motion.img
+              variants={letterAnim} 
+              src="/images/logo.png"
+              alt="TOWNHALL 2026 Logo"
+              className="mx-auto h-auto w-auto max-w-[99%] md:max-w-[79%] lg:max-w-[59%] drop-shadow-[0_0_25px_rgba(250,204,21,0.4)]"
+              animate={{ opacity: [0.8, 1, 0.8] }} 
+              transition={{ repeat: Infinity, duration: 2 }} 
+            />
           </motion.div>
 
           <motion.div
             initial={{ y: 200, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
+            animate={{ y: -150, opacity: 1 }}
             transition={{ duration: 1.4, delay: 0.2 }}
             className="relative flex justify-center z-20 sm:-mt-24 lg:-mt-32"
           >

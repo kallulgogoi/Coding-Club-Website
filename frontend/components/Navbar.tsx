@@ -48,12 +48,11 @@ export default function Navbar() {
             className="flex items-center gap-2 group min-w-[140px]"
           >
             <div className="relative">
-              <div className="w-8 h-8 border-2 border-yellow-400/20 rounded-full animate-spin-slow absolute inset-0" />
-              <Target className="w-8 h-8 text-yellow-400 p-1.5" />
+              <img src="images/logo.png" className="w-26 h-26"/>
             </div>
-            <span className="font-['Orbitron'] font-black text-lg tracking-tighter text-white hidden sm:block">
+            {/* <span className="font-['Orbitron'] font-black text-lg tracking-tighter text-white hidden sm:block">
               TOWN<span className="text-yellow-400">HALL</span>
-            </span>
+            </span> */}
           </Link>
 
           {/*Navigation */}
