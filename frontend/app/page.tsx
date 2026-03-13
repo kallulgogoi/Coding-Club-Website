@@ -179,7 +179,7 @@ export default function LandingPage() {
   return (
     <main className="min-h-screen bg-black overflow-x-hidden font-['Rajdhani']">
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-6 py-20">
-        <div className="absolute inset-0 z-0 w-full h-[1000px]">
+        <div className="absolute inset-0 z-0  w-[400px] h-[600px] md:w-full md:h-[1000px]">
           <Image
             src="/images/hero.gif"
             alt="Hero Background"
@@ -196,7 +196,7 @@ export default function LandingPage() {
           <div className="absolute inset-0 opacity-[0.05] bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
         </div>
 
-        <div className="relative w-full max-w-7xl flex flex-col items-center justify-center z-10 -mt-50">
+        <div className="relative w-full max-w-7xl flex flex-col items-center justify-center z-10 -mt-23 md:-mt-50">
           {/* <motion.div
             variants={titleContainer}
             initial="hidden"
@@ -259,7 +259,7 @@ export default function LandingPage() {
             initial={{ y: 200, opacity: 0 }}
             animate={{ y: -150, opacity: 1 }}
             transition={{ duration: 1.4, delay: 0.2 }}
-            className="relative flex justify-center z-20 sm:-mt-24 lg:-mt-32"
+            className="relative flex justify-center z-20 mt-3 sm:-mt-24 lg:-mt-32"
           >
             <Image
               src="/images/ash.png"
