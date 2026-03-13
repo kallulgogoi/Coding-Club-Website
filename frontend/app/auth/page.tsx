@@ -7,8 +7,8 @@ import api from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Shield, Lock, Info, CheckCircle2 } from "lucide-react";
+import { toast } from "react-hot-toast";
 
-// --- MINIMAL TECH LOADER ---
 function TechLoader() {
   return (
     <div className="relative flex items-center justify-center h-24">
@@ -51,6 +51,9 @@ export default function AuthPage() {
 
       const { token, user } = res.data;
       Cookies.set("token", token, { expires: 7 });
+      toast.success("Logged in successfully", {
+        icon: <CheckCircle2 size={18} className="text-green-400" />,
+      });
       router.push(user.profileCompleted ? "/events" : "/onboarding");
     } catch (err: any) {
       setIsLoading(false);
@@ -67,7 +70,7 @@ export default function AuthPage() {
     <GoogleOAuthProvider
       clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}
     >
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4 relative overflow-hidden font-['Rajdhani']">
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4 relative overflow-hidden font-custom">
         {/* Background Sophistication */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,#facc1503,transparent_70%)]" />

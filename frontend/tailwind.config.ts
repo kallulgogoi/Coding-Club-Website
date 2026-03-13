@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        custom: ["var(--font-custom)", "sans-serif"],
+      },
       colors: {
         brand: {
           black: "#000000",   // Dark background from logo
@@ -15,6 +18,9 @@ const config: Config = {
           white: "#ffffff",   // Stark white for contrast
           grey: "#333333",    // Subtle borders/cards
         },
+        arena: {
+          900: "#050505",   
+        }
       },
       animation: {
         'spin-slow': 'spin 8s linear infinite',

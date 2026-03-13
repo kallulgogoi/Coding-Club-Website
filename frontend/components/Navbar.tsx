@@ -16,6 +16,7 @@ import {
   Globe,
 } from "lucide-react";
 import Cookies from "js-cookie";
+import toast from "react-hot-toast"; // 1. Import toast
 
 export default function Navbar() {
   const { isAuthenticated, isAdmin, loading } = useAuth();
@@ -25,7 +26,18 @@ export default function Navbar() {
 
   const handleLogout = () => {
     Cookies.remove("token");
-    window.location.href = "/auth";
+    toast.success("Logged out successfully", {
+      icon: "👋",
+      style: {
+        borderRadius: "10px",
+        background: "#333",
+        color: "#fff",
+      },
+    });
+
+    setTimeout(() => {
+      window.location.href = "/auth";
+    }, 1000);
   };
 
   useEffect(() => {
@@ -48,14 +60,11 @@ export default function Navbar() {
             className="flex items-center gap-2 group min-w-[140px]"
           >
             <div className="relative">
-              <img src="images/logo.png" className="w-26 h-26"/>
+              <img src="images/logo.png" className="w-26 h-26" alt="Logo" />
             </div>
-            {/* <span className="font-['Orbitron'] font-black text-lg tracking-tighter text-white hidden sm:block">
-              TOWN<span className="text-yellow-400">HALL</span>
-            </span> */}
           </Link>
 
-          {/*Navigation */}
+          {/* Navigation */}
           <div className="hidden md:flex items-center bg-white/10 border border-white/30 rounded-full p-1 gap-1">
             <NavLink
               href="/events"
@@ -74,7 +83,7 @@ export default function Navbar() {
             />
           </div>
 
-          {/*User Actions */}
+          {/* User Actions */}
           <div className="flex items-center gap-4 min-w-[140px] justify-end">
             <div className="relative" ref={menuRef}>
               <button
@@ -148,21 +157,8 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
-      <div className="h-24 bg-black" />
 
-      <style jsx global>{`
-        @keyframes spin-slow {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-        .animate-spin-slow {
-          animation: spin-slow 8s linear infinite;
-        }
-      `}</style>
+      <div className="h-24 bg-black" />
     </>
   );
 }

@@ -3,19 +3,17 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import api from "@/lib/api";
 import toast, { Toaster } from "react-hot-toast";
-import { User } from "lucide-react";
+import { User, ShieldCheck, LayoutDashboard } from "lucide-react";
 
-// Component Imports
 import ProfileCard from "@/components/profile/ProfileCard";
 import MissionLogs from "@/components/profile/MissionLogs";
-import MissionModal from "@/components/profile/MissionModal";
 
 export default function ProfilePage() {
   const { isAuthenticated, loading: authLoading } = useAuth();
   const [activeSubTab, setActiveSubTab] = useState("all");
   const [isEditing, setIsEditing] = useState(false);
-  const [selectedMission, setSelectedMission] = useState<any>(null);
   const [data, setData] = useState<any>({ profile: null, solo: [], team: [] });
+
   const [editForm, setEditForm] = useState({
     name: "",
     scholarId: "",
@@ -24,7 +22,6 @@ export default function ProfilePage() {
     phone: "",
   });
   const [editFile, setEditFile] = useState<File | null>(null);
-
   const branches = ["CSE", "ECE", "EE", "ME", "CE", "EI"];
 
   const fetchProfileData = async () => {
@@ -36,6 +33,13 @@ export default function ProfilePage() {
           api.get("/registrations/team/my"),
         ]);
         setData({ profile: me.data, solo: s.data, team: t.data });
+        setEditForm({
+          name: me.data.name || "",
+          scholarId: me.data.scholarId || "",
+          branch: me.data.branch || "",
+          year: me.data.year?.toString() || "",
+          phone: me.data.phone || "",
+        });
       } catch (err) {
         toast.error("Failed to sync profile data");
       }
@@ -59,58 +63,60 @@ export default function ProfilePage() {
       setIsEditing(false);
       fetchProfileData();
     } catch (err: any) {
-      const msg = err.response?.data?.message || "Update failed";
-      toast.error(msg, { id: loadingToast });
+      toast.error(err.response?.data?.message || "Update failed", {
+        id: loadingToast,
+      });
     }
   };
 
   if (authLoading || !data.profile)
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <div className="w-16 h-16 border-t-2 border-yellow-400 rounded-full animate-spin"></div>
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center font-mono">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-2 border-yellow-400/20 border-t-yellow-400 rounded-full animate-spin"></div>
+          <p className="text-yellow-400 text-xs animate-pulse tracking-[0.3em]">
+            INITIALIZING_SESSION...
+          </p>
+        </div>
       </div>
     );
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white font-['Rajdhani']">
+    <main className="min-h-screen bg-[#050505] text-white font-custom selection:bg-yellow-400 selection:text-black">
       <Toaster position="top-right" />
 
-      <header className="border-b border-yellow-400/20 bg-[#111111] p-6 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto flex items-center gap-3">
-          <User className="text-yellow-400" />
-          <h1 className="text-xl font-bold uppercase tracking-tight">
-            Profile Dashboard
-          </h1>
+      <header className="border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-md p-6 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-yellow-400/10 rounded-lg border border-yellow-400/20">
+              <LayoutDashboard size={20} className="text-yellow-400" />
+            </div>
+            <h1 className="text-xl font-black uppercase tracking-tighter">
+              Dashboard
+            </h1>
+          </div>
         </div>
       </header>
 
-      {selectedMission && (
-        <MissionModal
-          mission={selectedMission}
-          userProfile={data.profile}
-          onClose={() => setSelectedMission(null)}
-        />
-      )}
+      <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="lg:col-span-4">
+          <ProfileCard
+            data={data}
+            isEditing={isEditing}
+            setIsEditing={setIsEditing}
+            editForm={editForm}
+            setEditForm={setEditForm}
+            handleUpdate={handleUpdate}
+            setEditFile={setEditFile}
+            branches={branches}
+          />
+        </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <ProfileCard
-          data={data}
-          isEditing={isEditing}
-          setIsEditing={setIsEditing}
-          editForm={editForm}
-          setEditForm={setEditForm}
-          handleUpdate={handleUpdate}
-          setEditFile={setEditFile}
-          editFile={editFile}
-          branches={branches}
-        />
-
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-8">
           <MissionLogs
             activeSubTab={activeSubTab}
             setActiveSubTab={setActiveSubTab}
             data={data}
-            onSelectMission={setSelectedMission}
           />
         </div>
       </div>

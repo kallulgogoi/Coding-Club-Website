@@ -108,7 +108,9 @@ exports.getMyTeams = async (req, res) => {
   try {
     const teams = await Team.find({
       members: req.user.id,
-    }).populate("event");
+    })
+      .populate("event")
+      .populate("members", "name scholarId branch");
 
     res.json(teams);
   } catch (error) {
