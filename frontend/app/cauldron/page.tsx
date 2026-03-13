@@ -40,12 +40,24 @@ export default function CauldronPage() {
     <main className="min-h-screen bg-black overflow-x-hidden font-['Rajdhani']">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center pt-24 pb-12 px-6 overflow-hidden">
-        <div className="absolute inset-0 z-0 opacity-30">
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+        <div className="absolute inset-0 z-0  w-full h-[670px] md:w-full md:h-[1000px]">
+          <Image
+            src="/images/cauldron.gif"
+            alt="Cauldron Hero Background"
+            fill
+            priority
+            className="object-cover opacity-40"
+            unoptimized
+          />
+          <div className="absolute inset-0 bg-black/60 bg-linear-to-b from-black via-transparent to-black" />
+        </div>
+        
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.05]" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-yellow-400/[0.05] rounded-full blur-[120px]" />
         </div>
         
-        <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center space-y-8 mt-12">
+        <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center justify-center text-center space-y-8 mt-12 md:-mt-50">
          
           <motion.h1 
             initial={{ opacity: 0, y: 30 }}
