@@ -2,133 +2,143 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 
-const battlePhrases = [
-  "READY...",
-  "3...",
-  "2...",
-  "1...",
-  "GO SHOOT!",
-  "LET IT RIP!",
-];
 
-export default function BeybladePreloader() {
+export default function Preloader() {
   const [isVisible, setIsVisible] = useState(true);
   const [progress, setProgress] = useState(0);
-  const [phraseIndex, setPhraseIndex] = useState(0);
 
-  // Loading Logic
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
-          setTimeout(() => setIsVisible(false), 1000);
+          setTimeout(() => setIsVisible(false), 600);
           return 100;
         }
-        return prev + 1;
+        // Eased progress: starts fast, slows near end
+        const increment = prev < 70 ? 2 : prev < 90 ? 1 : 0.5;
+        return Math.min(prev + increment, 100);
       });
     }, 30);
     return () => clearInterval(interval);
   }, []);
-
-  useEffect(() => {
-    if (progress < 20) setPhraseIndex(0);
-    else if (progress < 40) setPhraseIndex(1);
-    else if (progress < 60) setPhraseIndex(2);
-    else if (progress < 80) setPhraseIndex(3);
-    else if (progress < 95) setPhraseIndex(4);
-    else setPhraseIndex(5);
-  }, [progress]);
 
   return (
     <AnimatePresence>
       {isVisible && (
         <motion.div
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, scale: 1.05 }}
-          className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-[#0a0a0a] overflow-hidden"
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+          className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-[#050505] overflow-hidden"
         >
-          <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(#fa4141_0.5px,transparent_0.5px),radial-gradient(#4182fa_0.5px,transparent_0.5px)] bg-[size:40px_40px]" />
+          {/* Subtle radial gradient background */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(250,204,21,0.04)_0%,transparent_70%)]" />
 
-          <div className="relative w-full max-w-4xl flex flex-col items-center px-6">
-            {/* TOP HEADER */}
-            <motion.div
-              initial={{ y: -20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              className="mb-12 text-center"
-            >
-              <h2 className="text-yellow-400 font-custom italic text-xl tracking-[0.5em] mb-2">
-                TOWNHALL 2026
-              </h2>
-              <div className="h-[2px] w-32 bg-yellow-400 mx-auto" />
-            </motion.div>
+          {/* Floating particles */}
+          <FloatingParticles />
 
-            {/* THE BATTLE ARENA */}
-            <div className="relative w-full h-64 flex items-center justify-between">
-              {/* LEFT BLADE (RED) */}
+          {/* Main content */}
+          <div className="relative z-10 flex flex-col items-center gap-8">
+            {/* Animated logo ring */}
+            <div className="relative w-28 h-28 flex items-center justify-center">
+              {/* Outer spinning ring */}
               <motion.div
-                animate={{
-                  x: progress > 80 ? [0, 150, 120] : 0,
-                  rotate: progress * 20,
-                  scale: progress > 90 ? 1.2 : 1,
-                }}
-                className="relative z-20"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-0"
               >
-                <div className="absolute inset-0 bg-red-600/30 blur-2xl rounded-full" />
-                <BeybladeSVG color="#ff1e1e" glow="#ff9100" />
+                <svg viewBox="0 0 112 112" className="w-full h-full">
+                  <defs>
+                    <linearGradient id="ring-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#facc15" />
+                      <stop offset="50%" stopColor="#facc15" stopOpacity="0.2" />
+                      <stop offset="100%" stopColor="#facc15" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <circle
+                    cx="56"
+                    cy="56"
+                    r="52"
+                    fill="none"
+                    stroke="url(#ring-grad)"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                </svg>
               </motion.div>
 
-              {/* VS TEXT */}
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-                <AnimatePresence mode="wait">
-                  <motion.h1
-                    key={phraseIndex}
-                    initial={{ scale: 0.5, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 1.5, opacity: 0 }}
-                    className="text-5xl md:text-7xl font-custom italic font-black text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]"
-                  >
-                    {progress > 90 ? "RIP!" : "VS"}
-                  </motion.h1>
-                </AnimatePresence>
-              </div>
 
-              {/* RIGHT BLADE (BLUE) */}
               <motion.div
-                animate={{
-                  x: progress > 80 ? [0, -150, -120] : 0,
-                  rotate: -(progress * 20),
-                  scale: progress > 90 ? 1.2 : 1,
-                }}
-                className="relative z-20"
+                animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.6, 0.3] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute inset-3 rounded-full border border-yellow-400/20"
+              />
+
+
+              <motion.div
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.6, ease: "backOut" }}
+                className="relative z-10"
               >
-                <div className="absolute inset-0 bg-blue-600/30 blur-2xl rounded-full" />
-                <BeybladeSVG color="#1e90ff" glow="#00ffff" />
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="16 18 22 12 16 6" />
+                  <polyline points="8 6 2 12 8 18" />
+                  <line x1="14" y1="4" x2="10" y2="20" opacity="0.5" />
+                </svg>
               </motion.div>
             </div>
 
-            {/* PROGRESS SECTION */}
-            <div className="w-full max-w-md mt-16 space-y-4">
-              <div className="flex justify-between items-end font-custom italic">
-                <span className="text-white text-lg">
-                  {battlePhrases[phraseIndex]}
-                </span>
-                <span className="text-yellow-400 text-3xl">{progress}%</span>
-              </div>
+            {/* Title */}
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.7, ease: "easeOut" }}
+              className="text-center"
+            >
+              <h1 className="font-custom text-2xl md:text-3xl tracking-[0.3em] text-white/90">
+                TOWNHALL
+              </h1>
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: "100%" }}
+                transition={{ delay: 0.8, duration: 0.8, ease: "easeInOut" }}
+                className="h-[1px] bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent mt-2"
+              />
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1, duration: 0.6 }}
+                className="text-yellow-400/50 text-[10px] tracking-[0.5em] mt-3 font-mono"
+              >
+                CODING CLUB
+              </motion.p>
+            </motion.div>
 
-              {/* THE TRACK */}
-              <div className="relative h-4 w-full bg-white/10 rounded-full overflow-hidden border border-white/5">
+            {/* progress bar */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+              className="w-48 flex flex-col items-center gap-3"
+            >
+              <div className="w-full h-[2px] bg-white/5 rounded-full overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${progress}%` }}
-                  className="h-full bg-gradient-to-r from-red-500 via-yellow-400 to-blue-500 shadow-[0_0_20px_rgba(250,204,21,0.6)]"
+                  transition={{ duration: 0.1 }}
+                  className="h-full bg-gradient-to-r from-yellow-400/80 to-yellow-400 rounded-full"
+                  style={{
+                    boxShadow: "0 0 12px rgba(250, 204, 21, 0.4)",
+                  }}
                 />
               </div>
 
-              <p className="text-center text-[10px] text-white/40 tracking-[0.3em] font-mono">
-                INITIALIZING BIT-BEAST PROTOCOL // STADIUM READY
-              </p>
-            </div>
+              <span className="text-white/50 text-xs font-mono tracking-widest w-16 text-center tabular-nums">
+                {Math.round(progress)}%
+              </span>
+            </motion.div>
           </div>
         </motion.div>
       )}
@@ -136,67 +146,50 @@ export default function BeybladePreloader() {
   );
 }
 
-function BeybladeSVG({ color, glow }: { color: string; glow: string }) {
+function FloatingParticles() {
+  const [particles, setParticles] = useState<{ id: number, x: number, y: number, size: number, duration: number, delay: number }[]>([]);
+
+  useEffect(() => {
+    const generatedParticles = Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 2 + 1,
+      duration: Math.random() * 8 + 6,
+      delay: Math.random() * 4,
+    }));
+    setParticles(generatedParticles);
+  }, []);
+
+  if (particles.length === 0) return null;
+
   return (
-    <svg
-      width="140"
-      height="140"
-      viewBox="0 0 100 100"
-      className="drop-shadow-2xl"
-    >
-      <defs>
-        <filter id="glow">
-          <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
-          <feMerge>
-            <feMergeNode in="coloredBlur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
-
-      {/* Outer Ring */}
-      <circle
-        cx="50"
-        cy="50"
-        r="45"
-        fill="none"
-        stroke={color}
-        strokeWidth="2"
-        strokeDasharray="10 5"
-        opacity="0.5"
-      />
-
-      {/* Attack Layers */}
-      {[0, 90, 180, 270].map((r) => (
-        <g key={r} transform={`rotate(${r} 50 50)`}>
-          <path d="M50 5 L65 30 L50 25 L35 30 Z" fill={color} />
-          <path d="M50 15 L58 30 L50 28 L42 30 Z" fill={glow} opacity="0.8" />
-        </g>
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {particles.map((p) => (
+        <motion.div
+          key={p.id}
+          initial={{
+            x: `${p.x}vw`,
+            y: `${p.y}vh`,
+            opacity: 0,
+          }}
+          animate={{
+            y: [`${p.y}vh`, `${p.y - 15}vh`, `${p.y}vh`],
+            opacity: [0, 0.4, 0],
+          }}
+          transition={{
+            duration: p.duration,
+            repeat: Infinity,
+            delay: p.delay,
+            ease: "easeInOut",
+          }}
+          className="absolute rounded-full bg-yellow-400"
+          style={{
+            width: p.size,
+            height: p.size,
+          }}
+        />
       ))}
-
-      {/* Center Bit Chip */}
-      <rect
-        x="35"
-        y="35"
-        width="30"
-        height="30"
-        rx="2"
-        fill="#111"
-        stroke={color}
-        strokeWidth="3"
-      />
-      <circle cx="50" cy="50" r="8" fill={glow} filter="url(#glow)" />
-
-      {/* Spin Detail */}
-      <circle
-        cx="50"
-        cy="50"
-        r="48"
-        fill="none"
-        stroke="white"
-        strokeWidth="0.5"
-        opacity="0.2"
-      />
-    </svg>
+    </div>
   );
 }

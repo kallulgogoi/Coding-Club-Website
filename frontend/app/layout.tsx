@@ -7,6 +7,10 @@ import ScrollToTop from "@/components/ScrollToTop";
 import Preloader from "@/components/ui/Preloader";
 import { Toaster } from "react-hot-toast";
 import localFont from "next/font/local";
+import { Geist } from "next/font/google";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const myFont = localFont({
   src: [
@@ -35,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={cn("font-sans", geist.variable)}>
       <body
         className={`${myFont.variable} font-custom bg-arena-900 text-white antialiased overflow-x-hidden`}
       >

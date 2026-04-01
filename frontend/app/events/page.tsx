@@ -51,8 +51,8 @@ export default function EventsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
         <div className="flex items-center gap-4">
           <div>
-            <h1 className="text-3xl sm:text-6xl font-bold text-white tracking-tight">
-              Events
+            <h1 className="text-3xl sm:text-6xl font-custom font-bold text-white">
+              EVENTS
             </h1>
             <p className="text-white/40 text-sm mt-1">
               Browse and register for upcoming tournaments
@@ -98,11 +98,10 @@ export default function EventsPage() {
                   {/* Status Badge */}
                   <div className="absolute top-4 right-4">
                     <span
-                      className={`px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-md ${
-                        event.registrationStatus === "open"
-                          ? "bg-yellow-400 text-black"
-                          : "bg-red-500/10 text-red-500 border border-red-500/30"
-                      }`}
+                      className={`px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-md ${event.registrationStatus === "open"
+                        ? "bg-yellow-400 text-black"
+                        : "bg-red-500/10 text-red-500 border border-red-500/30"
+                        }`}
                     >
                       {event.registrationStatus === "open" ? "Open" : "Closed"}
                     </span>
