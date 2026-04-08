@@ -34,7 +34,7 @@ exports.getMyRegistrations = async (req, res) => {
     user: req.user.id,
   })
     .populate("event")
-    .populate("user", "name scholarId email branch");
+    .populate("user", "name scholarId email branch codeforcesHandle");
 
   res.json(registrations);
 };
@@ -43,7 +43,10 @@ exports.getEventRegistrations = async (req, res) => {
   try {
     const registrations = await Registration.find({
       event: req.params.eventId,
-    }).populate("user", "name email scholarId branch phone profilePicture");
+    }).populate(
+      "user",
+      "name email scholarId branch phone profilePicture codeforcesHandle",
+    );
     res.json(registrations);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });

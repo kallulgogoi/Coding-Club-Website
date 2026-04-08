@@ -9,12 +9,10 @@ import {
   User as UserIcon,
   Calendar,
   Award,
-  Camera,
   X,
   Save,
 } from "lucide-react";
 import Image from "next/image";
-import { useRef } from "react";
 
 export default function ProfileCard({
   data,
@@ -23,19 +21,12 @@ export default function ProfileCard({
   editForm,
   setEditForm,
   handleUpdate,
-  setEditFile,
   branches,
 }: any) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setEditFile(e.target.files[0]);
-    }
-  };
 
   return (
-    <div className="bg-[#111111] border border-gray-800 rounded-xl overflow-hidden sticky top-24">
+    <div className="bg-[#111111] border border-gray-800 rounded-xl overflow-hidden">
       {/* Cover Photo */}
       <div className="h-24 bg-gradient-to-r from-yellow-400/20 to-gray-800 relative">
         {!isEditing && (
@@ -64,23 +55,6 @@ export default function ProfileCard({
               width={80}
               alt="Profile"
             />
-
-            {isEditing && (
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="absolute -bottom-1 -right-1 p-1.5 bg-yellow-400 rounded-lg text-black hover:bg-yellow-300 transition-colors"
-              >
-                <Camera size={14} />
-              </button>
-            )}
-
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileChange}
-              accept="image/*"
-              className="hidden"
-            />
           </div>
         </div>
 
@@ -93,7 +67,11 @@ export default function ProfileCard({
               </h2>
               <p className="text-sm text-yellow-400/80">Student</p>
             </div>
-
+            <ProfileInfoRow
+              icon={UserIcon}
+              label="Codeforces Handle"
+              value={data.profile?.codeforcesHandle}
+            />
             <div className="space-y-4">
               <ProfileInfoRow
                 icon={Hash}
@@ -159,7 +137,20 @@ export default function ProfileCard({
                 placeholder="Enter your name"
               />
             </div>
-
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">
+                Codeforces Handle
+              </label>
+              <input
+                required
+                value={editForm.codeforcesHandle}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, codeforcesHandle: e.target.value })
+                }
+                className="w-full bg-[#0a0a0a] border border-gray-800 rounded-lg px-4 py-2.5 text-sm text-white focus:border-yellow-400/50 focus:outline-none transition-colors"
+                placeholder="Enter Codeforces handle"
+              />
+            </div>
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">
                 Scholar ID

@@ -10,10 +10,19 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 
 const TERMINAL_LINES = [
-  { prefix: "$ ", text: "init --event townhall_2026", color: "#facc15" },
-  { prefix: "> ", text: "status: ARENA_READY", color: "#ffffff" },
-  { prefix: "$ ", text: "deploy --org coding_club_nits", color: "#facc15" },
-  { prefix: "✓ ", text: "LET IT RIP.", color: "#facc15" },
+  {
+    prefix: "user@coding-club:~# ",
+    text: "start Townhall_2026",
+    color: "#facc15",
+  },
+  { prefix: "[ OK ] ", text: "Connecting to server...", color: "#10b981" },
+  { prefix: "[ OK ] ", text: "Loading event details...", color: "#10b981" },
+  {
+    prefix: "townhall@coding-club:~# ",
+    text: "launch --mode let_it_rip",
+    color: "#facc15",
+  },
+  { prefix: ">> ", text: "WELCOME TO TOWNHALL.", color: "#ffffff" },
 ];
 
 const TerminalWidget = () => {
@@ -39,7 +48,7 @@ const TerminalWidget = () => {
           ),
         );
         setCurrentChar((c) => c + 1);
-      }, 30);
+      }, 25);
       return () => clearTimeout(t);
     } else {
       setLines((prev) =>
@@ -48,7 +57,7 @@ const TerminalWidget = () => {
       const t = setTimeout(() => {
         setCurrentLine((l) => l + 1);
         setCurrentChar(0);
-      }, 500);
+      }, 400);
       return () => clearTimeout(t);
     }
   }, [currentLine, currentChar]);
@@ -58,38 +67,43 @@ const TerminalWidget = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.6 }}
-      className="font-mono text-[10px] sm:text-sm rounded-xl overflow-hidden border border-yellow-400/20 bg-black/80 backdrop-blur-xl w-full max-w-sm md:max-w-md shadow-2xl"
+      className="font-mono text-[10px] sm:text-xs md:text-sm rounded-xl overflow-hidden border border-white/10 bg-[#0a0a0a]/90 backdrop-blur-xl w-full max-w-sm md:max-w-lg shadow-[0_0_40px_rgba(250,204,21,0.1)]"
     >
-      <div className="flex items-center gap-2 px-4 py-2 border-b border-white/5 bg-white/5">
-        <div className="flex gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-red-500/50" />
-          <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/50" />
-          <span className="w-2.5 h-2.5 rounded-full bg-green-500/50" />
+      {/* Terminal Header */}
+      <div className="flex items-center justify-between px-4 py-3 border-b border-white/5 bg-white/2">
+        <div className="flex gap-2">
+          <span className="w-3 h-3 rounded-full bg-[#ff5f56] shadow-[0_0_10px_rgba(255,95,86,0.5)]" />
+          <span className="w-3 h-3 rounded-full bg-[#ffbd2e] shadow-[0_0_10px_rgba(255,189,46,0.5)]" />
+          <span className="w-3 h-3 rounded-full bg-[#27c93f] shadow-[0_0_10px_rgba(39,201,63,0.5)]" />
         </div>
-        <span className="ml-2 text-white/60 text-[9px] uppercase tracking-widest font-custom">
-          system.console
+        <span className="text-white/40 text-[10px] tracking-widest font-semibold uppercase font-custom">
+          user@arena_console
         </span>
+        <div className="w-12" />
       </div>
-      <div className="px-4 py-4 space-y-2 min-h-[120px]">
+
+      {/* Terminal Body */}
+      <div className="px-5 py-5 space-y-2.5 min-h-[160px]">
         {lines.map((line, i) => (
           <div key={i} className="flex items-start gap-2">
             <span
               style={{ color: line.color }}
-              className="shrink-0 font-bold opacity-50"
+              className="shrink-0 font-bold opacity-70"
             >
               {line.prefix}
             </span>
             <span
-              style={{ color: line.color }}
-              className="opacity-90 leading-relaxed"
+              className="opacity-90 leading-relaxed text-white break-all"
+              style={{ textShadow: `0 0 10px ${line.color}40` }}
             >
               {line.text}
             </span>
             {!line.done && i === lines.length - 1 && (
               <motion.span
                 animate={{ opacity: [1, 0] }}
-                transition={{ duration: 0.5, repeat: Infinity }}
-                className="inline-block w-2 h-4 bg-yellow-400"
+                transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+                className="inline-block w-2.5 h-4 md:h-5 bg-yellow-400 ml-1 translate-y-0.5"
+                style={{ boxShadow: "0 0 8px rgba(250,204,21,0.8)" }}
               />
             )}
           </div>
@@ -131,7 +145,6 @@ export default function HeroSection() {
       onMouseLeave={handleMouseLeave}
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-black px-4 pt-24 pb-12 lg:py-0"
     >
-      {/* --- Background Assets --- */}
       <div className="absolute inset-0 z-0">
         <Image
           src="/images/hero.gif"
@@ -143,16 +156,6 @@ export default function HeroSection() {
         />
         <div className="absolute inset-0 bg-linear-to-b from-black via-black/20 to-black" />
       </div>
-
-      {/* <div className="hidden lg:block absolute z-[1] -left-30 top-4/6 pointer-events-none grayscale brightness-50 rotate-45">
-        <Image
-          src="/images/beyblade1.png"
-          height={300}
-          width={300}
-          alt="background-blade"
-          className="object-contain"
-        />
-      </div> */}
 
       <div className="absolute inset-0 z-[1] pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-yellow-400/10 rounded-full blur-[120px]" />

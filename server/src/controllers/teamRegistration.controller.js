@@ -123,8 +123,11 @@ exports.getEventTeams = async (req, res) => {
     const teams = await Team.find({
       event: req.params.eventId,
     })
-      .populate("teamLeader", "name email scholarId branch phone")
-      .populate("members", "name scholarId branch");
+      .populate(
+        "teamLeader",
+        "name email scholarId branch phone codeforcesHandle",
+      )
+      .populate("members", "name scholarId branch codeforcesHandle");
 
     res.json(teams);
   } catch (error) {

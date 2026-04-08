@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema(
     name: { type: String },
 
     scholarId: { type: String, unique: true, sparse: true },
-
+    codeforcesHandle: { type: String, unique: true, sparse: true },
     branch: {
       type: String,
       enum: ["CSE", "ECE", "EE", "ME", "CE", "EI"],

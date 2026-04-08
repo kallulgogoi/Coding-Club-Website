@@ -16,12 +16,12 @@ export default function ProfilePage() {
 
   const [editForm, setEditForm] = useState({
     name: "",
+    codeforcesHandle: "",
     scholarId: "",
     branch: "",
     year: "",
     phone: "",
   });
-  const [editFile, setEditFile] = useState<File | null>(null);
   const branches = ["CSE", "ECE", "EE", "ME", "CE", "EI"];
 
   const fetchProfileData = async () => {
@@ -35,6 +35,7 @@ export default function ProfilePage() {
         setData({ profile: me.data, solo: s.data, team: t.data });
         setEditForm({
           name: me.data.name || "",
+          codeforcesHandle: me.data.codeforcesHandle || "",
           scholarId: me.data.scholarId || "",
           branch: me.data.branch || "",
           year: me.data.year?.toString() || "",
@@ -54,7 +55,6 @@ export default function ProfilePage() {
     e.preventDefault();
     const formData = new FormData();
     Object.entries(editForm).forEach(([k, v]) => formData.append(k, v));
-    if (editFile) formData.append("profilePicture", editFile);
 
     const loadingToast = toast.loading("Updating profile...");
     try {
@@ -107,7 +107,6 @@ export default function ProfilePage() {
             editForm={editForm}
             setEditForm={setEditForm}
             handleUpdate={handleUpdate}
-            setEditFile={setEditFile}
             branches={branches}
           />
         </div>

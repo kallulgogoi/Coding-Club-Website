@@ -16,6 +16,7 @@ import {
   X,
   Calendar,
   Info,
+  Code,
 } from "lucide-react";
 
 export default function AdminRegistrations({ events }: any) {
@@ -114,7 +115,11 @@ export default function AdminRegistrations({ events }: any) {
                     <td className="px-6 py-4 text-white font-bold uppercase tracking-tight">
                       <div className="flex items-center gap-3">
                         <div
-                          className={`p-2 rounded-lg ${reg.teamName ? "bg-cyan-500/10 text-cyan-400" : "bg-yellow-400/10 text-yellow-400"}`}
+                          className={`p-2 rounded-lg ${
+                            reg.teamName
+                              ? "bg-cyan-500/10 text-cyan-400"
+                              : "bg-yellow-400/10 text-yellow-400"
+                          }`}
                         >
                           {reg.teamName ? (
                             <Users size={16} />
@@ -216,6 +221,14 @@ export default function AdminRegistrations({ events }: any) {
                       value={
                         viewingReg.user?.scholarId ||
                         viewingReg.teamLeader?.scholarId
+                      }
+                    />
+                    <DetailRow
+                      icon={Code}
+                      label="Codeforces Handle"
+                      value={
+                        viewingReg.user?.codeforcesHandle ||
+                        viewingReg.teamLeader?.codeforcesHandle
                       }
                     />
                     <DetailRow

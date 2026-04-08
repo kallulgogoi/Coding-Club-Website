@@ -10,6 +10,7 @@ import {
   Mail,
   Phone,
   Award,
+  Code,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -189,6 +190,12 @@ function RegistrationCard({ reg, type, index, userProfile }: any) {
                 value={displayUser?.email}
               />
             )}
+
+            <DetailItem
+              icon={Code}
+              label="Codeforces"
+              value={displayUser?.codeforcesHandle}
+            />
 
             <DetailItem
               icon={Phone}

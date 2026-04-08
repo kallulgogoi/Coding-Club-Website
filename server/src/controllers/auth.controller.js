@@ -66,6 +66,7 @@ exports.getMe = async (req, res) => {
       role: user.role,
       profileCompleted: user.profileCompleted,
       profilePicture: user.profilePicture,
+      codeforcesHandle: user.codeforcesHandle,
       scholarId: user.scholarId,
       branch: user.branch,
       year: user.year,
@@ -78,7 +79,15 @@ exports.getMe = async (req, res) => {
 
 exports.completeOnboarding = async (req, res) => {
   try {
-    const { name, scholarId, branch, year, phone, profilePicture } = req.body;
+    const {
+      name,
+      scholarId,
+      branch,
+      year,
+      phone,
+      profilePicture,
+      codeforcesHandle,
+    } = req.body;
 
     const user = await User.findById(req.user.id);
 
@@ -97,6 +106,11 @@ exports.completeOnboarding = async (req, res) => {
         message: "Scholar ID is required",
       });
     }
+    if (!codeforcesHandle) {
+      return res.status(400).json({
+        message: "Codeforces handle is required",
+      });
+    }
 
     // Update fields
     user.name = name;
@@ -104,6 +118,7 @@ exports.completeOnboarding = async (req, res) => {
     user.branch = branch;
     user.year = year;
     user.phone = phone;
+    user.codeforcesHandle = codeforcesHandle || user.codeforcesHandle;
     user.profilePicture = profilePicture || user.profilePicture;
     user.profileCompleted = true;
 
@@ -120,7 +135,15 @@ exports.completeOnboarding = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
-    const { name, phone, profilePicture, scholarId, year, branch } = req.body;
+    const {
+      name,
+      phone,
+      profilePicture,
+      codeforcesHandle,
+      scholarId,
+      year,
+      branch,
+    } = req.body;
 
     const user = await User.findById(req.user.id);
 
@@ -130,6 +153,7 @@ exports.updateProfile = async (req, res) => {
     user.name = name || user.name;
     user.scholarId = scholarId || user.scholarId;
     user.branch = branch || user.branch;
+    user.codeforcesHandle = codeforcesHandle || user.codeforcesHandle;
     user.year = year || user.year;
     user.phone = phone || user.phone;
     if (req.file) {

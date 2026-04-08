@@ -9,12 +9,14 @@ import {
   GraduationCap,
   BookOpen,
   ArrowRight,
+  Code,
 } from "lucide-react";
 
 export default function OnboardingPage() {
   const router = useRouter();
   const [form, setForm] = useState({
     scholarId: "",
+    codeforcesHandle: "",
     branch: "CSE",
     year: "1",
     phone: "",
@@ -93,6 +95,27 @@ export default function OnboardingPage() {
               </p>
             </div>
 
+            {/* Codeforces Handle */}
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-sm text-white/60">
+                <Code className="w-4 h-4" />
+                <span>Codeforces Handle</span>
+              </label>
+              <input
+                required
+                type="text"
+                placeholder="e.g., tourist"
+                value={form.codeforcesHandle}
+                onChange={(e) =>
+                  setForm({ ...form, codeforcesHandle: e.target.value })
+                }
+                className="w-full bg-[#0a0a0a] border border-yellow-400/20 rounded-xl px-5 py-4 text-white placeholder-white/30 focus:border-yellow-400/40 focus:outline-none transition-colors"
+              />
+              <p className="text-[10px] text-white/20 mt-1">
+                Enter your Codeforces username
+              </p>
+            </div>
+
             {/* Branch & Year */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -141,7 +164,7 @@ export default function OnboardingPage() {
               <input
                 required
                 type="tel"
-                placeholder="e.g.,8011885784"
+                placeholder="e.g., 8011885784"
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 className="w-full bg-[#0a0a0a] border border-yellow-400/20 rounded-xl px-5 py-4 text-white placeholder-white/30 focus:border-yellow-400/40 focus:outline-none transition-colors"
