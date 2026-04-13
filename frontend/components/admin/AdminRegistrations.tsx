@@ -47,6 +47,81 @@ export default function AdminRegistrations({ events }: any) {
     }
   };
 
+  // CSV export csv logic
+  const handleDownloadCSV = () => {
+    if (!regs || regs.length === 0) return toast.error("No data to export");
+
+    const eventDetail = events.find((e: any) => e._id === selectedEvent);
+    const isTeam = eventDetail?.mode === "team";
+
+    let csvContent = "";
+
+    if (isTeam) {
+      // Headers for Team Event
+      csvContent +=
+        "Team Name,Leader Name,Leader Email,Leader Scholar ID,Leader Codeforces,Leader Phone,Leader Branch,Members (Name - ScholarID - CF)\n";
+
+      regs.forEach((reg: any) => {
+        const leader = reg.teamLeader || {};
+
+        // Format members as a single readable string cell
+        const membersList =
+          reg.members
+            ?.map((m: any, idx: number) => {
+              const cf = reg.memberCodeforcesHandles?.[idx]
+                ? `[CF: ${reg.memberCodeforcesHandles[idx]}]`
+                : "";
+              return `${m.name} (${m.scholarId}) ${cf}`;
+            })
+            .join(" | ") || "";
+
+        const row = [
+          `"${reg.teamName || ""}"`,
+          `"${leader.name || ""}"`,
+          `"${leader.email || ""}"`,
+          `"${leader.scholarId || ""}"`,
+          `"${reg.leaderCodeforcesHandle || leader.codeforcesHandle || ""}"`,
+          `"${leader.phone || ""}"`,
+          `"${leader.branch || ""}"`,
+          `"${membersList}"`,
+        ];
+        csvContent += row.join(",") + "\n";
+      });
+    } else {
+      // Headers for Solo Event
+      csvContent +=
+        "Name,Email,Scholar ID,Codeforces Handle,Phone,Branch,Registered At\n";
+
+      regs.forEach((reg: any) => {
+        const user = reg.user || {};
+        const row = [
+          `"${user.name || ""}"`,
+          `"${user.email || ""}"`,
+          `"${user.scholarId || ""}"`,
+          `"${reg.codeforcesHandle || user.codeforcesHandle || ""}"`,
+          `"${user.phone || ""}"`,
+          `"${user.branch || ""}"`,
+          `"${new Date(reg.createdAt).toLocaleString()}"`,
+        ];
+        csvContent += row.join(",") + "\n";
+      });
+    }
+
+    // Create Blob and Download
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+
+    // Clean filename
+    const fileName = `${eventDetail?.title?.replace(/[^a-z0-9]/gi, "_") || "event"}_registrations.csv`;
+    link.setAttribute("download", fileName);
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="space-y-6 font-custom relative">
       {/* Header */}
@@ -59,6 +134,17 @@ export default function AdminRegistrations({ events }: any) {
             View and export event participants
           </p>
         </div>
+
+        {/* DOWNLOAD BUTTON */}
+        {selectedEvent && regs.length > 0 && (
+          <button
+            onClick={handleDownloadCSV}
+            className="flex items-center justify-center gap-2 px-5 py-2.5 bg-yellow-400 text-black font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-yellow-300 transition-all shadow-lg shadow-yellow-400/20"
+          >
+            <Download size={14} />
+            Export CSV
+          </button>
+        )}
       </div>
 
       {/* Event Selection */}

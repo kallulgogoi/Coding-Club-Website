@@ -204,11 +204,11 @@ function RegistrationCard({ reg, type, index, userProfile }: any) {
               />
             )}
 
-            <DetailItem
+            {/* <DetailItem
               icon={Phone}
               label="Contact"
               value={displayUser?.phone}
-            />
+            /> */}
           </div>
         </div>
 

@@ -83,19 +83,17 @@ export default function Footer() {
               Navigation
             </h4>
             <ul className="space-y-4 text-gray-300 text-sm font-bold">
-              {["Events", "Register", "Cauldron", "Announcements"].map(
-                (item) => (
-                  <li key={item} className="group">
-                    <Link
-                      href={`/${item.toLowerCase()}`}
-                      className="flex items-center gap-2 hover:text-yellow-400 transition-colors"
-                    >
-                      <ArrowRight className="w-3 h-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all" />
-                      {item}
-                    </Link>
-                  </li>
-                ),
-              )}
+              {["Events", "Register", "Announcements"].map((item) => (
+                <li key={item} className="group">
+                  <Link
+                    href={`/${item.toLowerCase()}`}
+                    className="flex items-center gap-2 hover:text-yellow-400 transition-colors"
+                  >
+                    <ArrowRight className="w-3 h-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all" />
+                    {item}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 

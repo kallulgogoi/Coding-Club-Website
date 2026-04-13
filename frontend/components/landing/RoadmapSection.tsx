@@ -17,14 +17,17 @@ const sectionVar: Variants = {
 };
 
 const eventTimeline = [
-  { name: "Code Cauldron", icon: Code2, date: "Day 1" },
-  { name: "Quant League", icon: Trophy, date: "Day 2" },
-  { name: "Type Racing", icon: Zap, date: "Day 2" },
-  { name: "Get Hired", icon: GraduationCap, date: "Day 3" },
-  { name: "Lockout", icon: Swords, date: "Day 3" },
-  { name: "Bit by Byte Quiz", icon: Info, date: "Day 4" },
-  { name: "Goblin Gamble", icon: Globe, date: "Day 4" },
-  { name: "Capture the Flag", icon: Images, date: "Day 5" },
+  { name: "Prelims of Lockout+Get Hired", icon: Info, date: "17th April" },
+  { name: "Goblin’s Gamble", icon: Globe, date: "17th April" },
+
+  { name: "Lockout", icon: Swords, date: "18th April" },
+  { name: "Get Hired", icon: GraduationCap, date: "18th April" },
+  { name: "Bit by Byte Quiz", icon: Trophy, date: "18th April" },
+  { name: "Type Racing", icon: Zap, date: "18th April" },
+
+  { name: "Code Cauldron", icon: Code2, date: "19th April" },
+  { name: "Capture the Flag", icon: Images, date: "19th April" },
+  { name: "Quant Competition", icon: GraduationCap, date: "19th April" },
 ];
 
 export default function RoadmapSection() {

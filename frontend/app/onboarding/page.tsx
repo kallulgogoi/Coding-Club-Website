@@ -9,14 +9,13 @@ import {
   GraduationCap,
   BookOpen,
   ArrowRight,
-  Code,
 } from "lucide-react";
 
 export default function OnboardingPage() {
   const router = useRouter();
   const [form, setForm] = useState({
+    name: "",
     scholarId: "",
-    codeforcesHandle: "",
     branch: "CSE",
     year: "1",
     phone: "",
@@ -74,6 +73,22 @@ export default function OnboardingPage() {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="p-8 pt-6 space-y-6">
+            {/* Full Name*/}
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-sm text-white/60">
+                <User className="w-4 h-4" />
+                <span>Full Name</span>
+              </label>
+              <input
+                required
+                type="text"
+                placeholder="e.g., Tyson Granger"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                className="w-full bg-[#0a0a0a] border border-yellow-400/20 rounded-xl px-5 py-4 text-white placeholder-white/30 focus:border-yellow-400/40 focus:outline-none transition-colors"
+              />
+            </div>
+
             {/* Scholar ID */}
             <div className="space-y-2">
               <label className="flex items-center gap-2 text-sm text-white/60">
@@ -83,7 +98,7 @@ export default function OnboardingPage() {
               <input
                 required
                 type="text"
-                placeholder="e.g., 2023CSB1101"
+                placeholder="e.g., 2412109"
                 value={form.scholarId}
                 onChange={(e) =>
                   setForm({ ...form, scholarId: e.target.value })
@@ -92,27 +107,6 @@ export default function OnboardingPage() {
               />
               <p className="text-[10px] text-white/20 mt-1">
                 Enter your NITS scholar ID
-              </p>
-            </div>
-
-            {/* Codeforces Handle */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-sm text-white/60">
-                <Code className="w-4 h-4" />
-                <span>Codeforces Handle</span>
-              </label>
-              <input
-                required
-                type="text"
-                placeholder="e.g., tourist"
-                value={form.codeforcesHandle}
-                onChange={(e) =>
-                  setForm({ ...form, codeforcesHandle: e.target.value })
-                }
-                className="w-full bg-[#0a0a0a] border border-yellow-400/20 rounded-xl px-5 py-4 text-white placeholder-white/30 focus:border-yellow-400/40 focus:outline-none transition-colors"
-              />
-              <p className="text-[10px] text-white/20 mt-1">
-                Enter your Codeforces username
               </p>
             </div>
 
@@ -164,7 +158,7 @@ export default function OnboardingPage() {
               <input
                 required
                 type="tel"
-                placeholder="e.g., 8011885784"
+                placeholder="e.g., 1234567890"
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 className="w-full bg-[#0a0a0a] border border-yellow-400/20 rounded-xl px-5 py-4 text-white placeholder-white/30 focus:border-yellow-400/40 focus:outline-none transition-colors"
@@ -180,7 +174,7 @@ export default function OnboardingPage() {
               disabled={isLoading}
               className="w-full mt-8 relative group overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/0 via-yellow-400/20 to-yellow-400/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+              <div className="absolute inset-0 bg-linear-to-r from-yellow-400/0 via-yellow-400/20 to-yellow-400/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
               <div
                 className={`relative px-8 py-4 bg-yellow-400 text-black rounded-xl font-bold text-lg hover:bg-yellow-300 transition-all duration-300 shadow-lg shadow-yellow-400/20 flex items-center justify-center gap-2 ${
                   isLoading ? "opacity-50 cursor-not-allowed" : ""

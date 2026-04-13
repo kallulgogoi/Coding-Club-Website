@@ -99,7 +99,7 @@ exports.completeOnboarding = async (req, res) => {
     }
 
     // Update fields
-    user.name = name;
+    user.name = name || user.name;
     user.scholarId = scholarId;
     user.branch = branch;
     user.year = year;

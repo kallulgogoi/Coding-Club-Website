@@ -22,7 +22,7 @@ export default function ProfilePage() {
     year: "",
     phone: "",
   });
-  const branches = ["CSE", "ECE", "EE", "ME", "CE", "EI"];
+  const branches = ["CSE", "ECE", "EI", "EE", "ME", "CE"];
 
   const fetchProfileData = async () => {
     if (isAuthenticated) {

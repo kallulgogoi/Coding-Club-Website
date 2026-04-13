@@ -1,4 +1,3 @@
-// app/layout.tsx
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Ribbons from "@/components/ui/Ribbons";
@@ -10,7 +9,7 @@ import localFont from "next/font/local";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 const myFont = localFont({
   src: [

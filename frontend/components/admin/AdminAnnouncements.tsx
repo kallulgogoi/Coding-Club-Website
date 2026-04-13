@@ -20,8 +20,8 @@ export default function AdminAnnouncements({ announcements, fetchData }: any) {
       setAnnForm({ title: "", message: "" });
       setEditingAnnId(null);
       fetchData();
-    } catch (err) {
-      toast.error("Failed to post announcement");
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Failed to post announcement");
     }
   };
 
