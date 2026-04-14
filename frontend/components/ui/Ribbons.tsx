@@ -110,7 +110,8 @@ export default function Ribbons({
     window.addEventListener("resize", resize);
 
     const center = (colors.length - 1) / 2;
-    colors.forEach((color, index) => {
+    colors.forEach((color: string, index: number) => {
+      // <-- FIX IS HERE
       const line = {
         spring: baseSpring + (Math.random() - 0.5) * 0.02,
         friction: baseFriction,
