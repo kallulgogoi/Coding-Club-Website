@@ -154,7 +154,7 @@ export default function HeroSection() {
           priority
           className="object-cover opacity-20 grayscale contrast-125"
         />
-        <div className="absolute inset-0 bg-linear-to-b from-black via-black/20 to-black" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/20 to-black" />
       </div>
 
       <div className="absolute inset-0 z-[1] pointer-events-none">
@@ -258,7 +258,7 @@ export default function HeroSection() {
                 className="object-contain drop-shadow-[0_20px_60px_rgba(0,0,0,0.8)]"
                 style={{
                   filter: "drop-shadow(0 0 30px rgba(250,204,21,0.15))",
-                  translateZ: "50px",
+                  transform: "translateZ(50px)", // <-- THIS WAS FIXED!
                 }}
               />
             </motion.div>
